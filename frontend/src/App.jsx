@@ -2,6 +2,11 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import Login from "./Login";
 
+// =========================
+// PRODUCTION BACKEND URL
+// =========================
+const API_URL = "https://fresh-track-backend.vercel.app";
+
 function App() {
   // =========================
   // LOGIN
@@ -36,8 +41,9 @@ function App() {
   // =========================
   const [usageHistory, setUsageHistory] = useState(() => {
     try {
-      const saved =
-        localStorage.getItem("freshtrackUsageHistory");
+      const saved = localStorage.getItem(
+        "freshtrackUsageHistory"
+      );
 
       return saved ? JSON.parse(saved) : [];
     } catch (error) {
@@ -50,7 +56,10 @@ function App() {
   // =========================
   const [shoppingList, setShoppingList] = useState(() => {
     try {
-      const saved = localStorage.getItem("freshtrackShoppingList");
+      const saved = localStorage.getItem(
+        "freshtrackShoppingList"
+      );
+
       return saved ? JSON.parse(saved) : [];
     } catch (error) {
       return [];
@@ -73,12 +82,16 @@ function App() {
   const getFoods = async () => {
     try {
       const response = await fetch(
-        "http://localhost:5000/api/foods"
+        `${API_URL}/api/foods`
       );
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch foods");
+      }
 
       const data = await response.json();
 
-      setFoods(data);
+      setFoods(Array.isArray(data) ? data : []);
     } catch (error) {
       console.log("Error fetching foods:", error);
     }
@@ -93,7 +106,9 @@ function App() {
     getFoods();
 
     if ("Notification" in window) {
-      setNotificationStatus(Notification.permission);
+      setNotificationStatus(
+        Notification.permission
+      );
     }
   }, [isLoggedIn]);
 
@@ -132,7 +147,8 @@ function App() {
     expiry.setHours(0, 0, 0, 0);
 
     const difference =
-      (expiry - today) / (1000 * 60 * 60 * 24);
+      (expiry - today) /
+      (1000 * 60 * 60 * 24);
 
     if (difference < 0) {
       return "Expired";
@@ -156,7 +172,8 @@ function App() {
     expiry.setHours(0, 0, 0, 0);
 
     return Math.ceil(
-      (expiry - today) / (1000 * 60 * 60 * 24)
+      (expiry - today) /
+        (1000 * 60 * 60 * 24)
     );
   };
 
@@ -201,7 +218,7 @@ function App() {
 
     try {
       const response = await fetch(
-        "http://localhost:5000/api/foods",
+        `${API_URL}/api/foods`,
         {
           method: "POST",
           headers: {
@@ -225,7 +242,9 @@ function App() {
         expiryDate: "",
       });
 
-      getFoods();
+      await getFoods();
+
+      alert("Food added successfully!");
     } catch (error) {
       console.log(error);
       alert("Unable to add food");
@@ -265,9 +284,11 @@ function App() {
   const handleUpdate = async (e) => {
     e.preventDefault();
 
+    if (!editingFood) return;
+
     try {
       const response = await fetch(
-        `http://localhost:5000/api/foods/${editingFood._id}`,
+        `${API_URL}/api/foods/${editingFood._id}`,
         {
           method: "PUT",
           headers: {
@@ -276,8 +297,11 @@ function App() {
           body: JSON.stringify({
             name: editingFood.name,
             category: editingFood.category,
-            quantity: Number(editingFood.quantity),
-            expiryDate: editingFood.expiryDate,
+            quantity: Number(
+              editingFood.quantity
+            ),
+            expiryDate:
+              editingFood.expiryDate,
           }),
         }
       );
@@ -290,7 +314,7 @@ function App() {
 
       setEditingFood(null);
 
-      getFoods();
+      await getFoods();
     } catch (error) {
       console.log(error);
       alert("Unable to update food");
@@ -308,18 +332,22 @@ function App() {
   // USE FOOD
   // =========================
   const handleUseFood = async (food) => {
-    const currentQuantity = Number(food.quantity);
+    const currentQuantity =
+      Number(food.quantity);
 
     if (currentQuantity <= 0) {
-      alert("This food is already out of stock.");
+      alert(
+        "This food is already out of stock."
+      );
       return;
     }
 
-    const newQuantity = currentQuantity - 1;
+    const newQuantity =
+      currentQuantity - 1;
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/foods/${food._id}`,
+        `${API_URL}/api/foods/${food._id}`,
         {
           method: "PUT",
           headers: {
@@ -335,7 +363,9 @@ function App() {
       );
 
       if (!response.ok) {
-        throw new Error("Failed to update quantity");
+        throw new Error(
+          "Failed to update quantity"
+        );
       }
 
       const usageRecord = {
@@ -351,10 +381,12 @@ function App() {
         ...previous,
       ]);
 
-      getFoods();
+      await getFoods();
     } catch (error) {
       console.log(error);
-      alert("Unable to update food quantity");
+      alert(
+        "Unable to update food quantity"
+      );
     }
   };
 
@@ -362,15 +394,16 @@ function App() {
   // DELETE
   // =========================
   const handleDelete = async (id) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this food item?"
-    );
+    const confirmDelete =
+      window.confirm(
+        "Are you sure you want to delete this food item?"
+      );
 
     if (!confirmDelete) return;
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/foods/${id}`,
+        `${API_URL}/api/foods/${id}`,
         {
           method: "DELETE",
         }
@@ -380,7 +413,7 @@ function App() {
         throw new Error("Delete failed");
       }
 
-      getFoods();
+      await getFoods();
     } catch (error) {
       console.log(error);
       alert("Unable to delete food");
@@ -391,9 +424,10 @@ function App() {
   // CLEAR HISTORY
   // =========================
   const clearUsageHistory = () => {
-    const confirmClear = window.confirm(
-      "Are you sure you want to clear usage history?"
-    );
+    const confirmClear =
+      window.confirm(
+        "Are you sure you want to clear usage history?"
+      );
 
     if (!confirmClear) return;
 
@@ -420,26 +454,35 @@ function App() {
 
   const freshItems = foods.filter(
     (food) =>
-      getStatus(food.expiryDate, food.quantity) ===
-      "Fresh"
+      getStatus(
+        food.expiryDate,
+        food.quantity
+      ) === "Fresh"
   ).length;
 
-  const expiringSoonItems = foods.filter(
-    (food) =>
-      getStatus(food.expiryDate, food.quantity) ===
-      "Expiring Soon"
-  ).length;
+  const expiringSoonItems =
+    foods.filter(
+      (food) =>
+        getStatus(
+          food.expiryDate,
+          food.quantity
+        ) === "Expiring Soon"
+    ).length;
 
   const expiredItems = foods.filter(
     (food) =>
-      getStatus(food.expiryDate, food.quantity) ===
-      "Expired"
+      getStatus(
+        food.expiryDate,
+        food.quantity
+      ) === "Expired"
   ).length;
 
   const outOfStockItems = foods.filter(
     (food) =>
-      getStatus(food.expiryDate, food.quantity) ===
-      "Out of Stock"
+      getStatus(
+        food.expiryDate,
+        food.quantity
+      ) === "Out of Stock"
   ).length;
 
   // =========================
@@ -451,31 +494,37 @@ function App() {
     0
   );
 
-  const totalUsedQuantity = usageHistory.reduce(
-    (total, record) =>
-      total + Number(record.quantityUsed),
-    0
-  );
+  const totalUsedQuantity =
+    usageHistory.reduce(
+      (total, record) =>
+        total +
+        Number(record.quantityUsed),
+      0
+    );
 
   // =========================
   // WASTE
   // =========================
   const expiredFoods = foods.filter(
     (food) =>
-      getStatus(food.expiryDate, food.quantity) ===
-      "Expired"
+      getStatus(
+        food.expiryDate,
+        food.quantity
+      ) === "Expired"
   );
 
-  const totalWasteQuantity = expiredFoods.reduce(
-    (total, food) =>
-      total + Number(food.quantity),
-    0
-  );
+  const totalWasteQuantity =
+    expiredFoods.reduce(
+      (total, food) =>
+        total + Number(food.quantity),
+      0
+    );
 
   const wastePercentage =
     totalQuantity > 0
       ? (
-          (totalWasteQuantity / totalQuantity) *
+          (totalWasteQuantity /
+            totalQuantity) *
           100
         ).toFixed(1)
       : 0;
@@ -486,10 +535,14 @@ function App() {
   const useSoonFoods = foods
     .filter(
       (food) =>
-        getStatus(food.expiryDate, food.quantity) !==
-          "Expired" &&
-        getStatus(food.expiryDate, food.quantity) !==
-          "Out of Stock"
+        getStatus(
+          food.expiryDate,
+          food.quantity
+        ) !== "Expired" &&
+        getStatus(
+          food.expiryDate,
+          food.quantity
+        ) !== "Out of Stock"
     )
     .sort(
       (a, b) =>
@@ -499,25 +552,25 @@ function App() {
     .slice(0, 3);
 
   // ==================================================
-  // 🤖 AI FOOD CONSUMPTION PREDICTION
+  // AI FOOD CONSUMPTION PREDICTION
   // ==================================================
-
   const getAIPrediction = (food) => {
-    const foodUsage = usageHistory.filter(
-      (record) =>
-        record.foodName.toLowerCase() ===
-        food.name.toLowerCase()
-    );
+    const foodUsage =
+      usageHistory.filter(
+        (record) =>
+          record.foodName.toLowerCase() ===
+          food.name.toLowerCase()
+      );
 
     const totalUsed = foodUsage.reduce(
       (total, record) =>
-        total + Number(record.quantityUsed),
+        total +
+        Number(record.quantityUsed),
       0
     );
 
     let usageScore = 0;
 
-    // Usage history score
     if (totalUsed >= 5) {
       usageScore += 50;
     } else if (totalUsed >= 3) {
@@ -526,14 +579,14 @@ function App() {
       usageScore += 20;
     }
 
-    // Quantity score
     if (Number(food.quantity) <= 1) {
       usageScore += 20;
-    } else if (Number(food.quantity) <= 3) {
+    } else if (
+      Number(food.quantity) <= 3
+    ) {
       usageScore += 10;
     }
 
-    // Expiry score
     const daysLeft = getDaysLeft(
       food.expiryDate
     );
@@ -556,7 +609,8 @@ function App() {
         "Do not consume. Remove from inventory.";
       confidence = 98;
     } else if (daysLeft <= 1) {
-      prediction = "Very High Consumption";
+      prediction =
+        "Very High Consumption";
       recommendation =
         "Use this food immediately.";
       confidence = 95;
@@ -569,7 +623,8 @@ function App() {
         70 + usageScore / 5
       );
     } else if (usageScore >= 35) {
-      prediction = "Medium Consumption";
+      prediction =
+        "Medium Consumption";
       recommendation =
         "Monitor this food and use it regularly.";
       confidence = Math.min(
@@ -586,23 +641,28 @@ function App() {
     return {
       prediction,
       recommendation,
-      confidence: Math.round(confidence),
+      confidence:
+        Math.round(confidence),
       totalUsed,
       daysLeft,
     };
   };
 
   // ==================================================
-  // 🛒 SMART SHOPPING LIST
+  // SMART SHOPPING LIST
   // ==================================================
-
   const addToShoppingList = (food) => {
-    const alreadyAdded = shoppingList.some(
-      (item) => item.foodId === food._id && !item.purchased
-    );
+    const alreadyAdded =
+      shoppingList.some(
+        (item) =>
+          item.foodId === food._id &&
+          !item.purchased
+      );
 
     if (alreadyAdded) {
-      alert(`${food.name} is already in your shopping list.`);
+      alert(
+        `${food.name} is already in your shopping list.`
+      );
       return;
     }
 
@@ -612,12 +672,12 @@ function App() {
       name: food.name,
       category: food.category,
       quantity: 1,
-      purchased: false
+      purchased: false,
     };
 
     setShoppingList((previous) => [
       ...previous,
-      newItem
+      newItem,
     ]);
   };
 
@@ -627,7 +687,7 @@ function App() {
         item.id === id
           ? {
               ...item,
-              purchased: !item.purchased
+              purchased: !item.purchased,
             }
           : item
       )
@@ -636,39 +696,47 @@ function App() {
 
   const removeFromShoppingList = (id) => {
     setShoppingList((previous) =>
-      previous.filter((item) => item.id !== id)
+      previous.filter(
+        (item) => item.id !== id
+      )
     );
   };
 
   const clearPurchasedItems = () => {
     setShoppingList((previous) =>
-      previous.filter((item) => !item.purchased)
+      previous.filter(
+        (item) => !item.purchased
+      )
     );
   };
 
   // ==================================================
-  // 🤖 AI WASTE PREDICTION
+  // AI WASTE PREDICTION
   // ==================================================
-
   const getWastePrediction = (food) => {
-    const daysLeft = getDaysLeft(food.expiryDate);
-    const quantity = Number(food.quantity) || 0;
-
-    const foodUsage = usageHistory.filter(
-      (record) =>
-        record.foodName.toLowerCase() ===
-        food.name.toLowerCase()
+    const daysLeft = getDaysLeft(
+      food.expiryDate
     );
+
+    const quantity =
+      Number(food.quantity) || 0;
+
+    const foodUsage =
+      usageHistory.filter(
+        (record) =>
+          record.foodName.toLowerCase() ===
+          food.name.toLowerCase()
+      );
 
     const totalUsed = foodUsage.reduce(
       (total, record) =>
-        total + Number(record.quantityUsed),
+        total +
+        Number(record.quantityUsed),
       0
     );
 
     let riskScore = 0;
 
-    // Expiry risk
     if (daysLeft < 0) {
       riskScore += 100;
     } else if (daysLeft <= 1) {
@@ -679,7 +747,6 @@ function App() {
       riskScore += 25;
     }
 
-    // Quantity risk
     if (quantity >= 5) {
       riskScore += 25;
     } else if (quantity >= 3) {
@@ -688,14 +755,16 @@ function App() {
       riskScore += 5;
     }
 
-    // Usage history risk
     if (totalUsed === 0) {
       riskScore += 20;
     } else if (totalUsed <= 1) {
       riskScore += 10;
     }
 
-    riskScore = Math.min(100, riskScore);
+    riskScore = Math.min(
+      100,
+      riskScore
+    );
 
     let riskLevel;
     let recommendation;
@@ -723,7 +792,7 @@ function App() {
       riskScore,
       recommendation,
       daysLeft,
-      totalUsed
+      totalUsed,
     };
   };
 
@@ -732,113 +801,131 @@ function App() {
   // =========================
   const categories = [
     ...new Set(
-      foods.map((food) => food.category.trim())
+      foods.map((food) =>
+        food.category.trim()
+      )
     ),
   ];
 
-  const categoryAnalytics = categories.map(
-    (categoryName) => {
-      const categoryFoods = foods.filter(
-        (food) =>
-          food.category.trim().toLowerCase() ===
-          categoryName.toLowerCase()
-      );
+  const categoryAnalytics =
+    categories.map(
+      (categoryName) => {
+        const categoryFoods =
+          foods.filter(
+            (food) =>
+              food.category
+                .trim()
+                .toLowerCase() ===
+              categoryName.toLowerCase()
+          );
 
-      const quantity = categoryFoods.reduce(
-        (total, food) =>
-          total + Number(food.quantity),
-        0
-      );
+        const quantity =
+          categoryFoods.reduce(
+            (total, food) =>
+              total +
+              Number(food.quantity),
+            0
+          );
 
-      const expiredQuantity = categoryFoods
-        .filter(
-          (food) =>
-            getStatus(
-              food.expiryDate,
-              food.quantity
-            ) === "Expired"
-        )
-        .reduce(
-          (total, food) =>
-            total + Number(food.quantity),
-          0
-        );
+        const expiredQuantity =
+          categoryFoods
+            .filter(
+              (food) =>
+                getStatus(
+                  food.expiryDate,
+                  food.quantity
+                ) === "Expired"
+            )
+            .reduce(
+              (total, food) =>
+                total +
+                Number(food.quantity),
+              0
+            );
 
-      const fresh = categoryFoods.filter(
-        (food) =>
-          getStatus(
-            food.expiryDate,
-            food.quantity
-          ) === "Fresh"
-      ).length;
+        const fresh =
+          categoryFoods.filter(
+            (food) =>
+              getStatus(
+                food.expiryDate,
+                food.quantity
+              ) === "Fresh"
+          ).length;
 
-      const expiringSoon = categoryFoods.filter(
-        (food) =>
-          getStatus(
-            food.expiryDate,
-            food.quantity
-          ) === "Expiring Soon"
-      ).length;
+        const expiringSoon =
+          categoryFoods.filter(
+            (food) =>
+              getStatus(
+                food.expiryDate,
+                food.quantity
+              ) === "Expiring Soon"
+          ).length;
 
-      const expired = categoryFoods.filter(
-        (food) =>
-          getStatus(
-            food.expiryDate,
-            food.quantity
-          ) === "Expired"
-      ).length;
+        const expired =
+          categoryFoods.filter(
+            (food) =>
+              getStatus(
+                food.expiryDate,
+                food.quantity
+              ) === "Expired"
+          ).length;
 
-      const outOfStock = categoryFoods.filter(
-        (food) =>
-          getStatus(
-            food.expiryDate,
-            food.quantity
-          ) === "Out of Stock"
-      ).length;
+        const outOfStock =
+          categoryFoods.filter(
+            (food) =>
+              getStatus(
+                food.expiryDate,
+                food.quantity
+              ) === "Out of Stock"
+          ).length;
 
-      return {
-        name: categoryName,
-        itemCount: categoryFoods.length,
-        quantity,
-        expiredQuantity,
-        fresh,
-        expiringSoon,
-        expired,
-        outOfStock,
-      };
-    }
-  );
+        return {
+          name: categoryName,
+          itemCount:
+            categoryFoods.length,
+          quantity,
+          expiredQuantity,
+          fresh,
+          expiringSoon,
+          expired,
+          outOfStock,
+        };
+      }
+    );
 
   // =========================
   // NOTIFICATIONS
   // =========================
-  const enableNotifications = async () => {
-    if (!("Notification" in window)) {
-      alert(
-        "This browser does not support notifications."
-      );
-      return;
-    }
-
-    try {
-      const permission =
-        await Notification.requestPermission();
-
-      setNotificationStatus(permission);
-
-      if (permission === "granted") {
-        new Notification(
-          "FreshTrack Notifications Enabled 🔔",
-          {
-            body:
-              "You will receive expiry reminders.",
-          }
+  const enableNotifications =
+    async () => {
+      if (!("Notification" in window)) {
+        alert(
+          "This browser does not support notifications."
         );
+        return;
       }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+
+      try {
+        const permission =
+          await Notification.requestPermission();
+
+        setNotificationStatus(
+          permission
+        );
+
+        if (permission === "granted") {
+          new Notification(
+            "FreshTrack Notifications Enabled 🔔",
+            {
+              body:
+                "You will receive expiry reminders.",
+            }
+          );
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
 
   // =========================
   // SMART REMINDERS
@@ -851,7 +938,10 @@ function App() {
       return;
     }
 
-    if (Notification.permission !== "granted") {
+    if (
+      Notification.permission !==
+      "granted"
+    ) {
       alert(
         "Please enable notifications first."
       );
@@ -866,20 +956,20 @@ function App() {
         ) === "Expired"
     );
 
-    const expiringSoon = foods.filter(
-      (food) =>
-        getStatus(
-          food.expiryDate,
-          food.quantity
-        ) === "Expiring Soon"
-    );
+    const expiringSoon =
+      foods.filter(
+        (food) =>
+          getStatus(
+            food.expiryDate,
+            food.quantity
+          ) === "Expiring Soon"
+      );
 
     if (expired.length > 0) {
       new Notification(
         "FreshTrack - Expired Food 🔴",
         {
-          body:
-            `${expired.length} food item(s) have expired.`,
+          body: `${expired.length} food item(s) have expired.`,
         }
       );
     }
@@ -888,8 +978,7 @@ function App() {
       new Notification(
         "FreshTrack - Expiry Reminder 🟠",
         {
-          body:
-            `${expiringSoon.length} food item(s) are expiring soon.`,
+          body: `${expiringSoon.length} food item(s) are expiring soon.`,
         }
       );
     }
@@ -914,7 +1003,9 @@ function App() {
   if (!isLoggedIn) {
     return (
       <Login
-        onLogin={() => setIsLoggedIn(true)}
+        onLogin={() =>
+          setIsLoggedIn(true)
+        }
       />
     );
   }
@@ -927,7 +1018,6 @@ function App() {
 
       {/* HEADER */}
       <header className="header">
-
         <div>
           <h1>FreshTrack</h1>
 
@@ -943,15 +1033,11 @@ function App() {
         >
           🚪 Logout
         </button>
-
       </header>
 
       <main className="container">
 
-        {/* =========================
-            DASHBOARD
-        ========================= */}
-
+        {/* DASHBOARD */}
         <section className="dashboard">
 
           <div className="dashboard-card total-card">
@@ -983,7 +1069,9 @@ function App() {
 
             <div>
               <h3>Expiring Soon</h3>
-              <h2>{expiringSoonItems}</h2>
+              <h2>
+                {expiringSoonItems}
+              </h2>
             </div>
           </div>
 
@@ -1000,14 +1088,10 @@ function App() {
 
         </section>
 
-        {/* =========================
-            🤖 AI PREDICTION
-        ========================= */}
-
+        {/* AI FOOD PREDICTION */}
         <section className="ai-section">
 
           <div className="section-heading">
-
             <div>
               <h2>
                 🤖 AI Food Consumption Prediction
@@ -1022,7 +1106,6 @@ function App() {
             <span className="ai-main-icon">
               🧠
             </span>
-
           </div>
 
           {foods.length === 0 ? (
@@ -1034,7 +1117,6 @@ function App() {
             <div className="ai-grid">
 
               {foods.map((food) => {
-
                 const prediction =
                   getAIPrediction(food);
 
@@ -1095,9 +1177,7 @@ function App() {
                       </div>
 
                       <div>
-                        <span>
-                          🍽️ Used
-                        </span>
+                        <span>🍽️ Used</span>
 
                         <strong>
                           {prediction.totalUsed}
@@ -1137,7 +1217,8 @@ function App() {
                         <div
                           className="confidence-fill"
                           style={{
-                            width: `${prediction.confidence}%`,
+                            width:
+                              `${prediction.confidence}%`,
                           }}
                         ></div>
 
@@ -1172,7 +1253,9 @@ function App() {
               <strong>
                 How does the prediction work?
               </strong>
+
               <br />
+
               FreshTrack analyzes food usage
               history, current quantity and
               expiry dates to generate a smart
@@ -1183,10 +1266,7 @@ function App() {
 
         </section>
 
-        {/* =========================
-            🛒 SMART SHOPPING LIST
-        ========================= */}
-
+        {/* SMART SHOPPING LIST */}
         <section className="shopping-section">
 
           <div className="section-heading">
@@ -1225,7 +1305,9 @@ function App() {
                   >
 
                     <div>
-                      <strong>{food.name}</strong>
+                      <strong>
+                        {food.name}
+                      </strong>
 
                       <span>
                         {food.category}
@@ -1254,11 +1336,9 @@ function App() {
                 (food) =>
                   Number(food.quantity) <= 1
               ).length === 0 && (
-
                 <p className="no-suggestions">
                   ✅ No low-stock items right now.
                 </p>
-
               )}
 
             </div>
@@ -1276,7 +1356,9 @@ function App() {
               ) && (
                 <button
                   className="clear-purchased-button"
-                  onClick={clearPurchasedItems}
+                  onClick={
+                    clearPurchasedItems
+                  }
                 >
                   🧹 Clear Purchased
                 </button>
@@ -1285,92 +1367,91 @@ function App() {
             </div>
 
             {shoppingList.length === 0 ? (
-
               <div className="empty-shopping">
                 🛒 Your shopping list is empty.
               </div>
-
             ) : (
-
               <div className="shopping-list">
 
-                {shoppingList.map((item) => (
+                {shoppingList.map(
+                  (item) => (
 
-                  <div
-                    className={`shopping-item ${
-                      item.purchased
-                        ? "purchased"
-                        : ""
-                    }`}
-                    key={item.id}
-                  >
+                    <div
+                      className={`shopping-item ${
+                        item.purchased
+                          ? "purchased"
+                          : ""
+                      }`}
+                      key={item.id}
+                    >
 
-                    <div className="shopping-item-info">
+                      <div className="shopping-item-info">
 
-                      <span className="shopping-check">
-                        {item.purchased
-                          ? "✅"
-                          : "🛒"}
-                      </span>
+                        <span className="shopping-check">
+                          {item.purchased
+                            ? "✅"
+                            : "🛒"}
+                        </span>
 
-                      <div>
-                        <h4>{item.name}</h4>
+                        <div>
+                          <h4>{item.name}</h4>
 
-                        <p>
-                          {item.category}
-                        </p>
+                          <p>
+                            {item.category}
+                          </p>
+                        </div>
+
+                      </div>
+
+                      <div className="shopping-actions">
+
+                        <button
+                          className="purchase-button"
+                          onClick={() =>
+                            markAsPurchased(
+                              item.id
+                            )
+                          }
+                        >
+                          {item.purchased
+                            ? "Undo"
+                            : "Mark Purchased"}
+                        </button>
+
+                        <button
+                          className="remove-shopping-button"
+                          onClick={() =>
+                            removeFromShoppingList(
+                              item.id
+                            )
+                          }
+                        >
+                          Remove
+                        </button>
+
                       </div>
 
                     </div>
 
-                    <div className="shopping-actions">
-
-                      <button
-                        className="purchase-button"
-                        onClick={() =>
-                          markAsPurchased(item.id)
-                        }
-                      >
-                        {item.purchased
-                          ? "Undo"
-                          : "Mark Purchased"}
-                      </button>
-
-                      <button
-                        className="remove-shopping-button"
-                        onClick={() =>
-                          removeFromShoppingList(
-                            item.id
-                          )
-                        }
-                      >
-                        Remove
-                      </button>
-
-                    </div>
-
-                  </div>
-
-                ))}
+                  )
+                )}
 
               </div>
-
             )}
 
           </div>
 
         </section>
 
-        {/* =========================
-            🤖 AI WASTE PREDICTION
-        ========================= */}
-
+        {/* AI WASTE PREDICTION */}
         <section className="waste-prediction-section">
 
           <div className="section-heading">
 
             <div>
-              <h2>🤖 AI Waste Prediction</h2>
+              <h2>
+                🤖 AI Waste Prediction
+              </h2>
 
               <p>
                 Predict food waste risk using expiry,
@@ -1385,14 +1466,11 @@ function App() {
           </div>
 
           {foods.length === 0 ? (
-
             <div className="no-ai-data">
               🤖 Add food items to generate
               waste predictions.
             </div>
-
           ) : (
-
             <div className="waste-prediction-grid">
 
               {foods.map((food) => {
@@ -1401,7 +1479,6 @@ function App() {
                   getWastePrediction(food);
 
                 return (
-
                   <div
                     className="waste-prediction-card"
                     key={food._id}
@@ -1410,7 +1487,9 @@ function App() {
                     <div className="waste-card-header">
 
                       <div>
-                        <h3>🥗 {food.name}</h3>
+                        <h3>
+                          🥗 {food.name}
+                        </h3>
 
                         <p>
                           {food.category}
@@ -1443,7 +1522,7 @@ function App() {
                         className="risk-progress-fill"
                         style={{
                           width:
-                            `${prediction.riskScore}%`
+                            `${prediction.riskScore}%`,
                         }}
                       ></div>
 
@@ -1452,14 +1531,20 @@ function App() {
                     <div className="waste-details">
 
                       <div>
-                        <span>📦 Quantity</span>
+                        <span>
+                          📦 Quantity
+                        </span>
+
                         <strong>
                           {food.quantity}
                         </strong>
                       </div>
 
                       <div>
-                        <span>📅 Days Left</span>
+                        <span>
+                          📅 Days Left
+                        </span>
+
                         <strong>
                           {prediction.daysLeft < 0
                             ? "Expired"
@@ -1469,6 +1554,7 @@ function App() {
 
                       <div>
                         <span>🍽️ Used</span>
+
                         <strong>
                           {prediction.totalUsed}
                         </strong>
@@ -1489,21 +1575,15 @@ function App() {
                     </div>
 
                   </div>
-
                 );
-
               })}
 
             </div>
-
           )}
 
         </section>
 
-        {/* =========================
-            FOOD USAGE
-        ========================= */}
-
+        {/* FOOD USAGE */}
         <section className="usage-summary-section">
 
           <div className="section-heading">
@@ -1555,10 +1635,7 @@ function App() {
 
         </section>
 
-        {/* =========================
-            EDIT FOOD
-        ========================= */}
-
+        {/* EDIT FOOD */}
         {editingFood && (
           <section className="edit-section">
 
@@ -1581,9 +1658,7 @@ function App() {
 
               <div className="form-group">
 
-                <label>
-                  Food Name
-                </label>
+                <label>Food Name</label>
 
                 <input
                   type="text"
@@ -1596,9 +1671,7 @@ function App() {
 
               <div className="form-group">
 
-                <label>
-                  Category
-                </label>
+                <label>Category</label>
 
                 <input
                   type="text"
@@ -1611,9 +1684,7 @@ function App() {
 
               <div className="form-group">
 
-                <label>
-                  Quantity
-                </label>
+                <label>Quantity</label>
 
                 <input
                   type="number"
@@ -1627,14 +1698,14 @@ function App() {
 
               <div className="form-group">
 
-                <label>
-                  Expiry Date
-                </label>
+                <label>Expiry Date</label>
 
                 <input
                   type="date"
                   name="expiryDate"
-                  value={editingFood.expiryDate}
+                  value={
+                    editingFood.expiryDate
+                  }
                   onChange={handleEditChange}
                 />
 
@@ -1664,10 +1735,7 @@ function App() {
           </section>
         )}
 
-        {/* =========================
-            ADD FOOD
-        ========================= */}
-
+        {/* ADD FOOD */}
         <section className="add-section">
 
           <div className="section-heading">
@@ -1690,9 +1758,7 @@ function App() {
 
             <div className="form-group">
 
-              <label>
-                Food Name
-              </label>
+              <label>Food Name</label>
 
               <input
                 type="text"
@@ -1706,9 +1772,7 @@ function App() {
 
             <div className="form-group">
 
-              <label>
-                Category
-              </label>
+              <label>Category</label>
 
               <input
                 type="text"
@@ -1722,9 +1786,7 @@ function App() {
 
             <div className="form-group">
 
-              <label>
-                Quantity
-              </label>
+              <label>Quantity</label>
 
               <input
                 type="number"
@@ -1739,14 +1801,14 @@ function App() {
 
             <div className="form-group">
 
-              <label>
-                Expiry Date
-              </label>
+              <label>Expiry Date</label>
 
               <input
                 type="date"
                 name="expiryDate"
-                value={formData.expiryDate}
+                value={
+                  formData.expiryDate
+                }
                 onChange={handleChange}
               />
 
@@ -1763,10 +1825,7 @@ function App() {
 
         </section>
 
-        {/* =========================
-            REMINDERS
-        ========================= */}
-
+        {/* REMINDERS */}
         <section className="reminder-section">
 
           <div className="section-heading">
@@ -1838,10 +1897,7 @@ function App() {
 
         </section>
 
-        {/* =========================
-            WASTE
-        ========================= */}
-
+        {/* WASTE */}
         <section className="waste-section">
 
           <div className="section-heading">
@@ -1913,29 +1969,31 @@ function App() {
                 to Waste
               </h3>
 
-              {expiredFoods.map((food) => (
-                <div
-                  className="waste-item"
-                  key={food._id}
-                >
+              {expiredFoods.map(
+                (food) => (
+                  <div
+                    className="waste-item"
+                    key={food._id}
+                  >
 
-                  <div>
-                    <strong>
-                      {food.name}
-                    </strong>
+                    <div>
+                      <strong>
+                        {food.name}
+                      </strong>
 
-                    <p>
-                      {food.category}
-                    </p>
+                      <p>
+                        {food.category}
+                      </p>
+                    </div>
+
+                    <span>
+                      Quantity:{" "}
+                      {food.quantity}
+                    </span>
+
                   </div>
-
-                  <span>
-                    Quantity:{" "}
-                    {food.quantity}
-                  </span>
-
-                </div>
-              ))}
+                )
+              )}
 
             </div>
           ) : (
@@ -1946,10 +2004,7 @@ function App() {
 
         </section>
 
-        {/* =========================
-            CATEGORY ANALYTICS
-        ========================= */}
-
+        {/* CATEGORY ANALYTICS */}
         <section className="analytics-section">
 
           <div className="section-heading">
@@ -1998,8 +2053,8 @@ function App() {
                     </div>
 
                     <p>
-                      {category.itemCount}
-                      {" "}item(s)
+                      {category.itemCount}{" "}
+                      item(s)
                     </p>
 
                     <div className="category-status">
@@ -2033,7 +2088,9 @@ function App() {
                       0 && (
                       <div className="category-waste">
                         ⚠️ Waste Quantity:{" "}
-                        {category.expiredQuantity}
+                        {
+                          category.expiredQuantity
+                        }
                       </div>
                     )}
 
@@ -2051,10 +2108,7 @@ function App() {
 
         </section>
 
-        {/* =========================
-            USE SOON
-        ========================= */}
-
+        {/* USE SOON */}
         <section className="use-soon-section">
 
           <div className="section-heading">
@@ -2147,10 +2201,7 @@ function App() {
 
         </section>
 
-        {/* =========================
-            USAGE HISTORY
-        ========================= */}
-
+        {/* USAGE HISTORY */}
         <section className="usage-history-section">
 
           <div className="section-heading">
@@ -2284,10 +2335,7 @@ function App() {
 
         </section>
 
-        {/* =========================
-            ALERTS
-        ========================= */}
-
+        {/* ALERTS */}
         <section className="alerts-section">
 
           <div className="section-heading">
@@ -2428,10 +2476,7 @@ function App() {
 
         </section>
 
-        {/* =========================
-            INVENTORY
-        ========================= */}
-
+        {/* INVENTORY */}
         <section className="food-list-section">
 
           <div className="section-heading">
