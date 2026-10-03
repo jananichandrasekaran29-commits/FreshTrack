@@ -19,24 +19,52 @@ app.use(cors());
 // ===============================
 // MONGODB CONNECTION
 // ===============================
-let isConnected = false;
+
+let cached = global.mongoose;
+
+if (!cached) {
+  cached = global.mongoose = {
+    conn: null,
+    promise: null,
+  };
+}
 
 async function connectDB() {
-  if (isConnected) {
-    return;
+  if (cached.conn) {
+    return cached.conn;
+  }
+
+  if (!cached.promise) {
+    const opts = {
+      serverSelectionTimeoutMS: 10000,
+    };
+
+    cached.promise = mongoose
+      .connect(process.env.MONGODB_URI, opts)
+      .then((mongoose) => {
+        console.log("MongoDB Connected Successfully!");
+        return mongoose;
+      });
   }
 
   try {
-    await mongoose.connect(process.env.MONGODB_URI);
-    isConnected = true;
-    console.log("MongoDB Connected Successfully!");
+    cached.conn = await cached.promise;
   } catch (error) {
+    cached.promise = null;
+
     console.log("MongoDB Connection Error:", error.message);
+
     throw error;
   }
+
+  return cached.conn;
 }
 
-// Connect to MongoDB before handling requests
+// ===============================
+// CONNECT TO MONGODB
+// BEFORE HANDLING REQUESTS
+// ===============================
+
 app.use(async (req, res, next) => {
   try {
     await connectDB();
@@ -44,7 +72,7 @@ app.use(async (req, res, next) => {
   } catch (error) {
     res.status(500).json({
       message: "Database connection failed",
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -52,11 +80,13 @@ app.use(async (req, res, next) => {
 // ===============================
 // AUTH ROUTES
 // ===============================
+
 app.use("/api/auth", authRoutes);
 
 // ===============================
 // HOME
 // ===============================
+
 app.get("/", (req, res) => {
   res.send("FreshTrack Backend is Running!");
 });
@@ -64,15 +94,17 @@ app.get("/", (req, res) => {
 // ===============================
 // ADD FOOD
 // ===============================
+
 app.post("/api/foods", async (req, res) => {
   try {
     const food = new Food(req.body);
+
     const savedFood = await food.save();
 
     res.status(201).json(savedFood);
   } catch (error) {
     res.status(500).json({
-      message: error.message
+      message: error.message,
     });
   }
 });
@@ -80,6 +112,7 @@ app.post("/api/foods", async (req, res) => {
 // ===============================
 // GET ALL FOODS
 // ===============================
+
 app.get("/api/foods", async (req, res) => {
   try {
     const foods = await Food.find();
@@ -87,7 +120,7 @@ app.get("/api/foods", async (req, res) => {
     res.status(200).json(foods);
   } catch (error) {
     res.status(500).json({
-      message: error.message
+      message: error.message,
     });
   }
 });
@@ -95,6 +128,7 @@ app.get("/api/foods", async (req, res) => {
 // ===============================
 // UPDATE FOOD
 // ===============================
+
 app.put("/api/foods/:id", async (req, res) => {
   try {
     const updatedFood = await Food.findByIdAndUpdate(
@@ -106,7 +140,7 @@ app.put("/api/foods/:id", async (req, res) => {
     res.status(200).json(updatedFood);
   } catch (error) {
     res.status(500).json({
-      message: error.message
+      message: error.message,
     });
   }
 });
@@ -114,16 +148,17 @@ app.put("/api/foods/:id", async (req, res) => {
 // ===============================
 // DELETE FOOD
 // ===============================
+
 app.delete("/api/foods/:id", async (req, res) => {
   try {
     await Food.findByIdAndDelete(req.params.id);
 
     res.status(200).json({
-      message: "Food deleted successfully"
+      message: "Food deleted successfully",
     });
   } catch (error) {
     res.status(500).json({
-      message: error.message
+      message: error.message,
     });
   }
 });
@@ -131,4 +166,5 @@ app.delete("/api/foods/:id", async (req, res) => {
 // ===============================
 // VERCEL EXPORT
 // ===============================
+
 module.exports = app;
