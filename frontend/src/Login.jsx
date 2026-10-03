@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+const API_URL = "https://fresh-track-backend.vercel.app";
+
 function Login({ onLogin }) {
   const [isSignup, setIsSignup] = useState(false);
 
@@ -12,8 +14,8 @@ function Login({ onLogin }) {
 
     try {
       const url = isSignup
-        ? "http://localhost:5000/api/auth/signup"
-        : "http://localhost:5000/api/auth/login";
+        ? `${API_URL}/api/auth/signup`
+        : `${API_URL}/api/auth/login`;
 
       const body = isSignup
         ? { name, email, password }
@@ -22,9 +24,9 @@ function Login({ onLogin }) {
       const response = await fetch(url, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(body)
+        body: JSON.stringify(body),
       });
 
       const data = await response.json();
@@ -36,8 +38,10 @@ function Login({ onLogin }) {
 
       if (isSignup) {
         alert("Signup successful! Please login.");
+
         setIsSignup(false);
         setName("");
+        setEmail("");
         setPassword("");
       } else {
         localStorage.setItem("token", data.token);
@@ -49,7 +53,6 @@ function Login({ onLogin }) {
           onLogin(data.user);
         }
       }
-
     } catch (error) {
       alert("Backend connection failed");
       console.error(error);
@@ -131,7 +134,7 @@ const styles = {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    background: "#f0fdf4"
+    background: "#f0fdf4",
   },
 
   card: {
@@ -140,12 +143,12 @@ const styles = {
     borderRadius: "15px",
     background: "white",
     boxShadow: "0 5px 20px rgba(0,0,0,0.15)",
-    textAlign: "center"
+    textAlign: "center",
   },
 
   subtitle: {
     color: "#666",
-    marginBottom: "25px"
+    marginBottom: "25px",
   },
 
   input: {
@@ -154,7 +157,7 @@ const styles = {
     marginBottom: "15px",
     border: "1px solid #ccc",
     borderRadius: "8px",
-    boxSizing: "border-box"
+    boxSizing: "border-box",
   },
 
   button: {
@@ -165,11 +168,11 @@ const styles = {
     border: "none",
     borderRadius: "8px",
     cursor: "pointer",
-    fontSize: "16px"
+    fontSize: "16px",
   },
 
   switchText: {
-    marginTop: "20px"
+    marginTop: "20px",
   },
 
   linkButton: {
@@ -177,8 +180,8 @@ const styles = {
     background: "none",
     color: "#16a34a",
     cursor: "pointer",
-    fontWeight: "bold"
-  }
+    fontWeight: "bold",
+  },
 };
 
 export default Login;
