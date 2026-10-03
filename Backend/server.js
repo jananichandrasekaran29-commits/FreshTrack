@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const cors = require("cors");
+
 const Food = require("./models/Food");
 const authRoutes = require("./routes/auth");
 
@@ -9,8 +10,44 @@ dotenv.config();
 
 const app = express();
 
+// ===============================
+// MIDDLEWARE
+// ===============================
 app.use(express.json());
 app.use(cors());
+
+// ===============================
+// MONGODB CONNECTION
+// ===============================
+let isConnected = false;
+
+async function connectDB() {
+  if (isConnected) {
+    return;
+  }
+
+  try {
+    await mongoose.connect(process.env.MONGODB_URI);
+    isConnected = true;
+    console.log("MongoDB Connected Successfully!");
+  } catch (error) {
+    console.log("MongoDB Connection Error:", error.message);
+    throw error;
+  }
+}
+
+// Connect to MongoDB before handling requests
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (error) {
+    res.status(500).json({
+      message: "Database connection failed",
+      error: error.message
+    });
+  }
+});
 
 // ===============================
 // AUTH ROUTES
@@ -92,20 +129,6 @@ app.delete("/api/foods/:id", async (req, res) => {
 });
 
 // ===============================
-// MONGODB CONNECTION
+// VERCEL EXPORT
 // ===============================
-mongoose
-  .connect(process.env.MONGODB_URI)
-  .then(() => {
-    console.log("MongoDB Connected Successfully!");
-
-    app.listen(5000, () => {
-      console.log("Server running on port 5000");
-    });
-  })
-  .catch((error) => {
-    console.log(
-      "MongoDB Connection Error:",
-      error.message
-    );
-  });
+module.exports = app;
