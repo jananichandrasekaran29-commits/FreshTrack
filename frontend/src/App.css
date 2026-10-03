@@ -1,0 +1,1503 @@
+/* =========================================================
+   FRESHTRACK
+   Smart Food Expiry & Waste Reduction System
+   COMPLETE APP.CSS
+   ========================================================= */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f4f7f5;
+  color: #1f2937;
+  min-width: 320px;
+}
+
+button,
+input,
+select {
+  font-family: inherit;
+}
+
+.app {
+  min-height: 100vh;
+  background: #f4f7f5;
+}
+
+.container {
+  width: 92%;
+  max-width: 1250px;
+  margin: auto;
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.header {
+  background: linear-gradient(135deg, #15803d, #16a34a);
+  color: white;
+  padding: 22px 0;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
+}
+
+.header .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.header h1 {
+  font-size: 30px;
+  margin-bottom: 5px;
+}
+
+.header p {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.logout-button {
+  background: white;
+  color: #15803d;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.logout-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* =========================================================
+   DASHBOARD
+   ========================================================= */
+
+.dashboard {
+  padding: 30px 0;
+}
+
+.dashboard > .container > h2 {
+  margin-bottom: 20px;
+  font-size: 25px;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+
+.dashboard-card {
+  background: white;
+  padding: 22px;
+  border-radius: 14px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  transition: 0.25s;
+  border-left: 5px solid transparent;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-icon {
+  font-size: 35px;
+}
+
+.dashboard-card h3 {
+  font-size: 14px;
+  color: #374151;
+  margin-bottom: 5px;
+}
+
+.dashboard-card h2 {
+  font-size: 32px;
+  font-weight: 800;
+  margin-top: 5px;
+}
+
+/* Dashboard card border colors */
+
+.total-card {
+  border-left-color: #2563eb;
+}
+
+.fresh-card {
+  border-left-color: #16a34a;
+}
+
+.soon-card {
+  border-left-color: #ea580c;
+}
+
+.expired-card {
+  border-left-color: #dc2626;
+}
+
+/* Dashboard number colors */
+
+.total-card h2 {
+  color: #2563eb !important;
+}
+
+.fresh-card h2 {
+  color: #16a34a !important;
+}
+
+.soon-card h2 {
+  color: #ea580c !important;
+}
+
+.expired-card h2 {
+  color: #dc2626 !important;
+}
+
+/* Dashboard icons */
+
+.total-card .dashboard-icon {
+  color: #2563eb;
+}
+
+.fresh-card .dashboard-icon {
+  color: #16a34a;
+}
+
+.soon-card .dashboard-icon {
+  color: #ea580c;
+}
+
+.expired-card .dashboard-icon {
+  color: #dc2626;
+}
+
+/* =========================================================
+   COMMON SECTIONS
+   ========================================================= */
+
+section {
+  margin: 30px 0;
+}
+
+.section-heading {
+  font-size: 23px;
+  margin-bottom: 8px;
+  color: #111827;
+}
+
+section > p {
+  color: #6b7280;
+  margin-bottom: 20px;
+}
+
+/* =========================================================
+   AI FOOD CONSUMPTION PREDICTION
+   ========================================================= */
+
+.ai-section {
+  position: relative;
+  background: linear-gradient(135deg, #ffffff, #f0fdf4);
+  border: 1px solid #bbf7d0;
+  border-radius: 18px;
+  padding: 28px;
+  overflow: hidden;
+}
+
+.ai-section::before {
+  content: "";
+  position: absolute;
+  width: 180px;
+  height: 180px;
+  background: #dcfce7;
+  border-radius: 50%;
+  right: -80px;
+  top: -80px;
+  opacity: 0.6;
+}
+
+.ai-section .section-heading {
+  position: relative;
+  z-index: 1;
+}
+
+.ai-main-icon {
+  font-size: 42px;
+  margin-bottom: 10px;
+}
+
+.ai-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.ai-card {
+  background: white;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 5px 18px rgba(22, 163, 74, 0.1);
+  border: 1px solid #dcfce7;
+  transition: 0.25s;
+}
+
+.ai-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(22, 163, 74, 0.16);
+}
+
+.ai-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.ai-food-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ai-food-icon {
+  font-size: 30px;
+}
+
+.ai-food-info h3 {
+  font-size: 18px;
+  margin-bottom: 3px;
+}
+
+.ai-food-info p {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.ai-badge {
+  background: #dcfce7;
+  color: #15803d;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.ai-prediction {
+  margin-bottom: 18px;
+}
+
+.ai-label {
+  display: block;
+  color: #6b7280;
+  font-size: 12px;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.ai-prediction h3 {
+  color: #15803d;
+  font-size: 20px;
+}
+
+.ai-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.ai-details div {
+  background: #f9fafb;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.ai-details span {
+  display: block;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.ai-details strong {
+  font-size: 15px;
+}
+
+.ai-confidence {
+  margin-bottom: 15px;
+}
+
+.confidence-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  margin-bottom: 7px;
+}
+
+.confidence-bar {
+  width: 100%;
+  height: 9px;
+  background: #e5e7eb;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.confidence-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #22c55e, #15803d);
+  border-radius: 20px;
+}
+
+.ai-recommendation {
+  background: #f0fdf4;
+  border-left: 4px solid #16a34a;
+  padding: 12px;
+  border-radius: 7px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.ai-note {
+  margin-top: 20px;
+  background: #f8fafc;
+  border-radius: 10px;
+  padding: 15px;
+  color: #475569;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.no-ai-data {
+  text-align: center;
+  padding: 30px;
+  background: white;
+  border-radius: 12px;
+  color: #6b7280;
+}
+
+/* =========================================================
+   SMART SHOPPING LIST
+   ========================================================= */
+
+.shopping-section {
+  background: linear-gradient(135deg, #ffffff, #eff6ff);
+  border: 1px solid #bfdbfe;
+  border-radius: 18px;
+  padding: 28px;
+}
+
+.shopping-main-icon {
+  font-size: 42px;
+  margin-bottom: 10px;
+}
+
+.shopping-suggestions {
+  margin-top: 20px;
+}
+
+.shopping-list-title {
+  font-size: 18px;
+  margin-bottom: 15px;
+}
+
+.suggestion-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+}
+
+.suggestion-card {
+  background: white;
+  border: 1px solid #dbeafe;
+  border-radius: 12px;
+  padding: 17px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+  transition: 0.2s;
+}
+
+.suggestion-card:hover {
+  transform: translateY(-2px);
+}
+
+.suggestion-card strong {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.suggestion-card span {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.add-shopping-button {
+  border: none;
+  background: #2563eb;
+  color: white;
+  padding: 8px 13px;
+  border-radius: 7px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.add-shopping-button:hover {
+  background: #1d4ed8;
+}
+
+.shopping-list-container {
+  margin-top: 25px;
+}
+
+.shopping-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.shopping-item {
+  background: white;
+  border: 1px solid #e5e7eb;
+  padding: 13px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+.shopping-item-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.shopping-check {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.shopping-item-info strong {
+  display: block;
+}
+
+.shopping-item-info span {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.shopping-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.purchase-button {
+  background: #16a34a;
+  color: white;
+  border: none;
+  padding: 7px 12px;
+  border-radius: 7px;
+  cursor: pointer;
+}
+
+.purchase-button:hover {
+  background: #15803d;
+}
+
+.remove-shopping-button {
+  background: #fee2e2;
+  color: #dc2626;
+  border: none;
+  padding: 7px 12px;
+  border-radius: 7px;
+  cursor: pointer;
+}
+
+.remove-shopping-button:hover {
+  background: #fecaca;
+}
+
+.clear-purchased-button {
+  margin-top: 15px;
+  background: #6b7280;
+  color: white;
+  border: none;
+  padding: 9px 14px;
+  border-radius: 7px;
+  cursor: pointer;
+}
+
+.clear-purchased-button:hover {
+  background: #4b5563;
+}
+
+.empty-shopping {
+  text-align: center;
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  color: #6b7280;
+}
+
+/* =========================================================
+   AI WASTE PREDICTION
+   ========================================================= */
+
+.waste-prediction-section {
+  background: linear-gradient(135deg, #ffffff, #fff7ed);
+  border: 1px solid #fed7aa;
+  border-radius: 18px;
+  padding: 28px;
+}
+
+.waste-ai-icon {
+  font-size: 42px;
+  margin-bottom: 10px;
+}
+
+.waste-prediction-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.waste-prediction-card {
+  background: white;
+  padding: 20px;
+  border-radius: 15px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+  transition: 0.25s;
+}
+
+.waste-prediction-card:hover {
+  transform: translateY(-4px);
+}
+
+.waste-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.waste-card-header h3 {
+  font-size: 18px;
+}
+
+.waste-card-header p {
+  color: #6b7280;
+  font-size: 13px;
+  margin-top: 3px;
+}
+
+.risk-display {
+  text-align: center;
+  margin: 10px 0 18px;
+}
+
+.risk-display h2 {
+  font-size: 36px;
+  color: #dc2626;
+  margin-bottom: 5px;
+}
+
+.risk-display strong {
+  font-size: 15px;
+}
+
+.risk-progress {
+  height: 10px;
+  background: #e5e7eb;
+  border-radius: 20px;
+  overflow: hidden;
+  margin-top: 10px;
+}
+
+.risk-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #22c55e, #f59e0b, #dc2626);
+  border-radius: 20px;
+}
+
+.waste-details {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+.waste-details div {
+  background: #f9fafb;
+  padding: 9px;
+  border-radius: 7px;
+  text-align: center;
+}
+
+.waste-details span {
+  display: block;
+  font-size: 11px;
+  color: #6b7280;
+}
+
+.waste-details strong {
+  font-size: 14px;
+}
+
+.waste-recommendation {
+  background: #fff7ed;
+  border-left: 4px solid #f97316;
+  padding: 12px;
+  border-radius: 7px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* =========================================================
+   FOOD USAGE
+   ========================================================= */
+
+.usage-summary-section {
+  margin-bottom: 25px;
+}
+
+.usage-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.usage-summary-card {
+  background: white;
+  padding: 22px;
+  border-radius: 13px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.07);
+  text-align: center;
+}
+
+.usage-summary-card h3 {
+  color: #6b7280;
+  font-size: 14px;
+  margin: 8px 0;
+}
+
+.usage-summary-card strong {
+  font-size: 28px;
+}
+
+/* =========================================================
+   ADD FOOD
+   ========================================================= */
+
+.add-section,
+.edit-section {
+  background: white;
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.07);
+}
+
+.food-form,
+.edit-form {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+  align-items: end;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-size: 13px;
+  font-weight: bold;
+  margin-bottom: 7px;
+  color: #374151;
+}
+
+.form-group input,
+.form-group select,
+.food-form input,
+.food-form select,
+.edit-form input,
+.edit-form select {
+  width: 100%;
+  padding: 11px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  outline: none;
+  background: white;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.food-form input:focus,
+.food-form select:focus,
+.edit-form input:focus,
+.edit-form select:focus {
+  border-color: #16a34a;
+  box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
+}
+
+.add-button,
+.save-button {
+  border: none;
+  background: #16a34a;
+  color: white;
+  padding: 11px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.add-button:hover,
+.save-button:hover {
+  background: #15803d;
+}
+
+.cancel-button {
+  border: none;
+  background: #6b7280;
+  color: white;
+  padding: 11px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.edit-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+/* =========================================================
+   REMINDERS
+   ========================================================= */
+
+.reminder-section {
+  background: white;
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.07);
+}
+
+.reminder-control {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background: #f9fafb;
+  padding: 18px;
+  border-radius: 10px;
+}
+
+.reminder-icon {
+  font-size: 32px;
+}
+
+.reminder-control-text {
+  flex: 1;
+}
+
+.reminder-control-text strong {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.reminder-control-text p {
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.reminder-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.notification-button,
+.reminder-test-button {
+  border: none;
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.notification-button {
+  background: #2563eb;
+  color: white;
+}
+
+.notification-button:hover {
+  background: #1d4ed8;
+}
+
+.reminder-test-button {
+  background: #f59e0b;
+  color: white;
+}
+
+.reminder-test-button:hover {
+  background: #d97706;
+}
+
+/* =========================================================
+   WASTE REDUCTION
+   ========================================================= */
+
+.waste-section {
+  background: white;
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.07);
+}
+
+.waste-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.waste-item {
+  padding: 20px;
+  border-radius: 12px;
+  background: #f9fafb;
+  text-align: center;
+}
+
+.waste-item h3 {
+  color: #6b7280;
+  font-size: 14px;
+  margin: 8px 0;
+}
+
+.waste-item strong {
+  font-size: 27px;
+}
+
+.no-waste {
+  text-align: center;
+  padding: 25px;
+  background: #f0fdf4;
+  border-radius: 10px;
+  color: #15803d;
+}
+
+/* =========================================================
+   CATEGORY ANALYTICS
+   ========================================================= */
+
+.analytics-section {
+  background: white;
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.07);
+}
+
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.category-card {
+  background: #f9fafb;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+}
+
+.category-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 15px;
+}
+
+.category-icon {
+  font-size: 30px;
+}
+
+.category-total {
+  margin-left: auto;
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.category-status {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.category-waste {
+  margin-top: 10px;
+  color: #dc2626;
+  font-size: 13px;
+}
+
+.no-analytics {
+  text-align: center;
+  padding: 25px;
+  color: #6b7280;
+}
+
+/* =========================================================
+   USE SOON RECOMMENDATIONS
+   ========================================================= */
+
+.use-soon-section {
+  background: white;
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.07);
+}
+
+.use-soon-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.use-soon-card {
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  padding: 20px;
+  border-radius: 13px;
+  position: relative;
+}
+
+.recommendation-number {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  background: #f97316;
+  color: white;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-weight: bold;
+}
+
+.use-soon-food-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.use-soon-icon {
+  font-size: 30px;
+}
+
+.use-soon-card-content {
+  margin-top: 15px;
+}
+
+.use-soon-card-content h3 {
+  margin-bottom: 4px;
+}
+
+.use-soon-card-content p {
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.use-soon-details {
+  margin-top: 12px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+}
+
+.no-use-soon {
+  text-align: center;
+  padding: 25px;
+  color: #6b7280;
+}
+
+/* =========================================================
+   USAGE HISTORY
+   ========================================================= */
+
+.usage-history-section {
+  background: white;
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.07);
+}
+
+.history-summary {
+  margin-bottom: 20px;
+}
+
+.history-total {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.usage-history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.usage-history-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  background: #f9fafb;
+  border-radius: 10px;
+}
+
+.history-food-icon {
+  font-size: 30px;
+}
+
+.history-food-info {
+  flex: 1;
+}
+
+.history-food-info strong {
+  display: block;
+}
+
+.history-food-info span {
+  color: #6b7280;
+  font-size: 12px;
+}
+
+.history-quantity {
+  font-weight: bold;
+}
+
+.history-date {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.clear-history-button {
+  margin-top: 15px;
+  border: none;
+  background: #dc2626;
+  color: white;
+  padding: 9px 14px;
+  border-radius: 7px;
+  cursor: pointer;
+}
+
+.clear-history-button:hover {
+  background: #b91c1c;
+}
+
+.empty-history {
+  text-align: center;
+  padding: 25px;
+  color: #6b7280;
+}
+
+/* =========================================================
+   ALERTS
+   ========================================================= */
+
+.alerts-section {
+  background: white;
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.07);
+}
+
+.alert-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.alert-item strong {
+  display: block;
+}
+
+.alert-box {
+  border-left: 5px solid;
+}
+
+.soon-alert {
+  background: #fff7ed;
+  border-left-color: #f59e0b;
+}
+
+.expired-alert {
+  background: #fef2f2;
+  border-left-color: #dc2626;
+}
+
+.stock-alert {
+  background: #f3f4f6;
+  border-left-color: #6b7280;
+}
+
+/* =========================================================
+   INVENTORY
+   ========================================================= */
+
+.food-list-section {
+  background: white;
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.07);
+}
+
+.search-box {
+  width: 100%;
+  padding: 13px;
+  border: 1px solid #d1d5db;
+  border-radius: 9px;
+  margin-bottom: 20px;
+  outline: none;
+}
+
+.search-box:focus {
+  border-color: #16a34a;
+  box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
+}
+
+.food-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.food-card {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 20px;
+  transition: 0.25s;
+}
+
+.food-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+}
+
+.food-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.food-card-header h3 {
+  font-size: 19px;
+}
+
+.food-card-header p {
+  color: #6b7280;
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+.food-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.food-details div {
+  background: white;
+  padding: 10px;
+  border-radius: 7px;
+}
+
+.food-details span {
+  display: block;
+  color: #6b7280;
+  font-size: 11px;
+}
+
+.food-details strong {
+  font-size: 13px;
+}
+
+.food-actions {
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+
+.edit-button,
+.use-button,
+.delete-button {
+  border: none;
+  padding: 8px 11px;
+  border-radius: 7px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.edit-button {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.edit-button:hover {
+  background: #bfdbfe;
+}
+
+.use-button {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.use-button:hover {
+  background: #bbf7d0;
+}
+
+.delete-button {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.delete-button:hover {
+  background: #fecaca;
+}
+
+.no-foods {
+  text-align: center;
+  padding: 30px;
+  color: #6b7280;
+}
+
+/* =========================================================
+   STATUS
+   ========================================================= */
+
+.food-status {
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.status-fresh {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.status-soon {
+  background: #ffedd5;
+  color: #c2410c;
+}
+
+.status-expired {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.status-out {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.footer {
+  margin-top: 50px;
+  background: #111827;
+  color: #d1d5db;
+  text-align: center;
+  padding: 25px;
+  font-size: 13px;
+}
+
+/* =========================================================
+   RESPONSIVE TABLET
+   ========================================================= */
+
+@media (max-width: 1000px) {
+  .dashboard-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .ai-grid,
+  .waste-prediction-grid,
+  .suggestion-grid,
+  .category-grid,
+  .use-soon-grid,
+  .food-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .food-form,
+  .edit-form {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .waste-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* =========================================================
+   RESPONSIVE MOBILE
+   ========================================================= */
+
+@media (max-width: 650px) {
+  .container {
+    width: 94%;
+  }
+
+  .header .container {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .header h1 {
+    font-size: 25px;
+  }
+
+  .dashboard {
+    padding-top: 20px;
+  }
+
+  .dashboard-grid,
+  .ai-grid,
+  .waste-prediction-grid,
+  .suggestion-grid,
+  .category-grid,
+  .use-soon-grid,
+  .food-grid,
+  .usage-summary-grid,
+  .waste-list {
+    grid-template-columns: 1fr;
+  }
+
+  .food-form,
+  .edit-form {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-card {
+    padding: 18px;
+  }
+
+  .ai-section,
+  .shopping-section,
+  .waste-prediction-section,
+  .add-section,
+  .edit-section,
+  .reminder-section,
+  .waste-section,
+  .analytics-section,
+  .use-soon-section,
+  .usage-history-section,
+  .alerts-section,
+  .food-list-section {
+    padding: 18px;
+  }
+
+  .ai-details {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .waste-details {
+    grid-template-columns: 1fr;
+  }
+
+  .reminder-control {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .reminder-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .notification-button,
+  .reminder-test-button {
+    width: 100%;
+  }
+
+  .usage-history-item {
+    flex-wrap: wrap;
+  }
+
+  .shopping-item {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .shopping-actions {
+    width: 100%;
+  }
+
+  .shopping-actions button {
+    flex: 1;
+  }
+
+  .food-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+
+  .food-actions button {
+    width: 100%;
+  }
+}
+
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 400px) {
+  .dashboard-card {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .ai-details {
+    grid-template-columns: 1fr;
+  }
+
+  .food-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .section-heading {
+    font-size: 20px;
+  }
+
+  .dashboard-card h2 {
+    font-size: 29px;
+  }
+}
